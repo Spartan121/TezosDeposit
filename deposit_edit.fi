@@ -1,0 +1,52 @@
+#Payment contract
+const int ONEHOUR 3600;
+
+
+storage map[address => mutez] value;
+storage map[address => timestamp] StartTime;
+
+entry Contribute() {
+    
+    let int hourrate = div(int 1000,int 125);
+    
+    #claim fee from payment
+    let int fee = div(to_int(AMOUNT),int 10);
+    transfer(OWNER,to_mutez(fee));
+    
+    
+
+    #see for baker existance
+    if (!in(storage.StartTime,SENDER))
+    {
+        push(storage.StartTime,SENDER,NOW);
+        push(storage.value,SENDER,AMOUNT);
+        throw(string "Successfully registered");
+
+    }
+    #look for spended time at the moment
+    let int timespent = div( sub ( NOW , get(storage.StartTime,SENDER) ) , ONEHOUR);
+    #see if passed time from last payment(assert is not working properly - TODO fix)
+    if (timespent < ONEHOUR)
+    {
+        throw(string "Spent time is less than 1 hour");
+    }
+    #set passed hours from last payment
+    let int hourspassed = div(timespent,ONEHOUR);
+    #set payment to baker
+    let mutez payout = mod(get(storage.value,SENDER),mod(hourrate,hourspassed));
+
+    #checks lasts money on contract
+    if (BALANCE < payout)
+    {
+        throw(string "Not enough money");
+    }
+    #send money to baker
+    transfer(SENDER,payout);
+
+    #update baker info
+    push(storage.StartTime,SENDER,NOW);
+    push(storage.value,SENDER,add(get(storage.value,SENDER),AMOUNT));
+
+}
+
+    
