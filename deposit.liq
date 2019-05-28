@@ -1,11 +1,11 @@
-[%%version 1.03]
+[%%version 1.04]
 type storage = ((address, tez) map * (address, timestamp) map)
 [%%entry
   let main (parameter : bytes) (storage : storage) =
     let res10 =
       match Bytes.sub 0p 4p parameter with
-      | None  -> failwith 100p
-      | Some var12 -> var12  in
+      | None  -> failwith "Divisible by 0"
+      | ((Some (var12))[@explicit_arity ]) -> var12  in
     let _ = compare (0xdde2916a : bytes) res10  in
     if (0xdde2916a : bytes) = res10
     then
@@ -14,11 +14,11 @@ type storage = ((address, tez) map * (address, timestamp) map)
         (match (1 *
                 ((match (Current.amount ()) / 0.000001tz with
                     | None  -> failwith "Error with casting"
-                    | Some var38 -> var38).(0p)))
+                    | ((Some (var38))[@explicit_arity ]) -> var38).(0p)))
                / 10
          with
          | None  -> failwith "Divisible by 0"
-         | Some var52 -> var52).(0p)
+         | ((Some (var52))[@explicit_arity ]) -> var52).(0p)
       in
       let pair60 = (var58_fst59, ((None : int option), pair27))  in
       let _ = (pair60, (([] : operation list), storage))  in
@@ -31,11 +31,13 @@ type storage = ((address, tez) map * (address, timestamp) map)
                             UnitContract.instance option)
                    with
                    | None  -> failwith "Invalid contract"
-                   | Some var79 -> var79)
+                   | ((Some (var79))[@explicit_arity ]) -> var79)
             ~amount:(([%nat
                        match var58_fst59 with
-                       | Plus var58_fst59 -> var58_fst59
-                       | Minus var58_fst59 -> var58_fst59])
+                       | ((Plus (var58_fst59))[@explicit_arity ]) ->
+                           var58_fst59
+                       | ((Minus (var58_fst59))[@explicit_arity ]) ->
+                           var58_fst59])
                      * 0.000001tz) ~parameter:()
         in
         let cons87 = [exp86]  in
@@ -58,11 +60,11 @@ type storage = ((address, tez) map * (address, timestamp) map)
            (match ((Current.time ()) -
                    (match Map.find (Current.sender ()) (storage.(1p)) with
                     | None  -> failwith "Key not found in map"
-                    | Some var125 -> var125))
+                    | ((Some (var125))[@explicit_arity ]) -> var125))
                   / 3600
             with
             | None  -> failwith "Divisible by 0"
-            | Some var137 -> var137).(0p)
+            | ((Some (var137))[@explicit_arity ]) -> var137).(0p)
          in
          let _ = ((var58_fst59, (var143_fst144, pair27)), pair88)  in
          let _ = compare var143_fst144 3600  in
@@ -71,7 +73,7 @@ type storage = ((address, tez) map * (address, timestamp) map)
          (let var168_fst169 =
             (match var143_fst144 / 3600 with
              | None  -> failwith "Divisible by 0"
-             | Some var162 -> var162).(0p)
+             | ((Some (var162))[@explicit_arity ]) -> var162).(0p)
           in
           let _ =
             ((var58_fst59,
@@ -81,13 +83,13 @@ type storage = ((address, tez) map * (address, timestamp) map)
           let var207_snd208 =
             (match (match Map.find (Current.sender ()) (storage.(0p)) with
                  | None  -> failwith "Key not found in map"
-                 | Some var179 -> var179) /
+                 | ((Some (var179))[@explicit_arity ]) -> var179) /
                    ((match 0 / var168_fst169 with
                        | None  -> failwith "Divisible by 0"
-                       | Some var190 -> var190).(1p))
+                       | ((Some (var190))[@explicit_arity ]) -> var190).(1p))
              with
              | None  -> failwith "Divisible by 0"
-             | Some var201 -> var201).(1p)
+             | ((Some (var201))[@explicit_arity ]) -> var201).(1p)
           in
           let pair211 =
             (var58_fst59, (var143_fst144, (var168_fst169, var207_snd208)))
@@ -102,8 +104,8 @@ type storage = ((address, tez) map * (address, timestamp) map)
                                  option)
                       with
                       | None  -> failwith "Invalid contract"
-                      | Some var228 -> var228) ~amount:var207_snd208
-               ~parameter:()
+                      | ((Some (var228))[@explicit_arity ]) -> var228)
+               ~amount:var207_snd208 ~parameter:()
            in
            let cons236 = exp235 :: cons87  in
            let _ = (pair211, (cons236, storage))  in
@@ -114,9 +116,10 @@ type storage = ((address, tez) map * (address, timestamp) map)
            let add261 =
              (match Map.find (Current.sender ()) storage_fst244 with
               | None  -> failwith "Key not found in map"
-              | Some var253 -> var253) + (Current.amount ())
+              | ((Some (var253))[@explicit_arity ]) -> var253) +
+             (Current.amount ())
            in
-           let _ = Some add261  in
+           let _ = ((Some (add261))[@explicit_arity ])  in
            let pair265 =
              (cons236,
               ((Map.add (Current.sender ()) add261 storage_fst244),
